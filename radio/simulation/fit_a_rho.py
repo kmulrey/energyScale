@@ -2,12 +2,16 @@ import numpy as np
 import os
 import cPickle
 import matplotlib.pyplot as plt
+import sys
+import tools as tools
+
+import fluence as flu
+import radiation_energy as rad
 import sim_functions as sim
+import helper as helper
+from scipy.optimize import minimize
+import matplotlib.ticker as ticker
 
-
-plt.ion()
-
-data_dir='/Users/kmulrey/LOFAR/energy/energyScale/data/radio/sim/'
 
 mag=2.03
 average_density = 6.5e-4 #in g/cm^3#atmc.get_density(average_zenith, average_xmax) * 1e-3  # in kg/m^3
@@ -17,46 +21,18 @@ p1=-2.95290494
 p0_=0.239
 p1_=-3.13
 
-def read_file(filename):
+data_dir='/Users/kmulrey/LOFAR/energy/energyScale/data/radio/sim/'
 
-    infile=open(filename,'r')
-    info=cPickle.load(infile)
-    infile.close()
-    print info.keys()
-    
-    em_energy=info['em_energy']
-    other_energy=info['other_energy']
-    total_energy=info['total_energy']
-    zenith=info['zenith']
-    azimuth=info['azimuth']
-    energy=info['energy']
-    xmax=info['xmax']
-    alpha=info['alpha']
-    Erad=info['Erad']
-    clip=info['clip']
-    charge_excess_ratio=info['charge_excess_ratio']
-    S_basic=info['S_basic']
-    Srd_1=info['Srd_1']
-    Srd_2=info['Srd_2']
-    density=info['density']
-    
-    Erad=Erad+Erad*.11-Erad*0.0336
-    S_basic=S_basic+S_basic*.11-S_basic*0.0336
-    Srd_1=Srd_1+Srd_1*.11-Srd_1*0.0336
-    Srd_2=(Srd_2+Srd_2*.11-Srd_2*0.0336)
-    
-    corr=((1 - p0 + p0 * np.exp(p1 * (density - average_density)*1e3)) )**2
-    corr_=((1 - p0_ + p0_ * np.exp(p1_ * (density - average_density)*1e3)) )**2
+coreas_file=data_dir+'compiled_sims_proton.dat'
 
-    print charge_excess_ratio
-
-    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio
-
-em_energy_P,energy_P,zenith_P,azimuth_P,xmax_P,alpha_P,S_basic_P,Srd_1_P,Srd_2_P,Erad_P,a_P=read_file(data_dir+'compiled_sims_proton.dat')
-em_energy_Fe,energy_Fe,zenith_Fe,azimuth_Fe,xmax_Fe,alpha_Fe,S_basic_Fe,Srd_1_Fe,Srd_2_Fe,Erad_Fe,a_Fe=read_file(data_dir+'compiled_sims_iron.dat')
+em_energy_P,energy_P,zenith_P,azimuth_P,xmax_P,alpha_P,S_basic_P,Srd_1_P,Srd_2_P,Erad_P,a_P=tools.read_file_plain(data_dir+'compiled_sims_proton.dat')
+em_energy_Fe,energy_Fe,zenith_Fe,azimuth_Fe,xmax_Fe,alpha_Fe,S_basic_Fe,Srd_1_Fe,Srd_2_Fe,Erad_Fe,a_Fe=tools.read_file_plain(data_dir+'compiled_sims_iron.dat')
 
 print len(em_energy_P)
 print len(em_energy_Fe)
+
+
+
 
 
 

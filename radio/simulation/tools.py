@@ -69,7 +69,7 @@ def read_file(filename):
     corr_=((1 - p0_ + p0_ * np.exp(p1_ * (density - average_density)*1e3)) )**2
     
     
-    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio,event,p_ratio,d_ratio,type
+    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2,Erad,charge_excess_ratio,event,p_ratio,d_ratio,type
 
 
 
@@ -320,3 +320,38 @@ def e(pars,energy,rad,std):
     #X2=np.sum(((np.log10(rad)-np.log10(y))**2)/(np.log10(energy)))/len(energy)
 
     return X2
+
+
+def read_file_plain(filename):
+    
+    infile=open(filename,'r')
+    info=cPickle.load(infile)
+    infile.close()
+    print info.keys()
+    
+    em_energy=info['em_energy']
+    other_energy=info['other_energy']
+    total_energy=info['total_energy']
+    zenith=info['zenith']
+    azimuth=info['azimuth']
+    energy=info['energy']
+    xmax=info['xmax']
+    alpha=info['alpha']
+    Erad=info['Erad']
+    clip=info['clip']
+    charge_excess_ratio=info['charge_excess_ratio']
+    S_basic=info['S_basic']
+    Srd_1=info['Srd_1']
+    Srd_2=info['Srd_2']
+    density=info['density']
+    
+    Erad=Erad+Erad*.11-Erad*0.0336
+    S_basic=S_basic+S_basic*.11-S_basic*0.0336
+    Srd_1=Srd_1+Srd_1*.11-Srd_1*0.0336
+    Srd_2=(Srd_2+Srd_2*.11-Srd_2*0.0336)
+    
+    corr=((1 - p0 + p0 * np.exp(p1 * (density - average_density)*1e3)) )**2
+    corr_=((1 - p0_ + p0_ * np.exp(p1_ * (density - average_density)*1e3)) )**2
+    
+    
+    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio
