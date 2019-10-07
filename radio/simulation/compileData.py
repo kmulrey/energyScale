@@ -10,9 +10,9 @@ file_list=[]
 
 for file in os.listdir(data_dir):
     if file.startswith('proton'):
+        
         file_list.append(data_dir+file)
 
-print file_list
 
 outfilename='compiled_sims_proton.dat'
 
@@ -25,6 +25,8 @@ energy=np.empty([0])
 xmax=np.empty([0])
 alpha=np.empty([0])
 Erad=np.empty([0])
+Erad_vxB=np.empty([0])
+Erad_vxvxB=np.empty([0])
 clip=np.empty([0])
 charge_excess_ratio=np.empty([0])
 S_basic=np.empty([0])
@@ -40,26 +42,28 @@ for i in np.arange(len(file_list)):
     infile=open(file_list[i],'r')
     info=cPickle.load(infile)
     infile.close()
+    try:
+        em_energy_hold=info['em_energy']
+        other_energy_hold=info['other_energy']
+        total_energy_hold=info['total_energy']
+        zenith_hold=info['zenith']
+        azimuth_hold=info['azimuth']
+        energy_hold=info['energy']
+        xmax_hold=info['xmax']
+        alpha_hold=info['alpha']
+        Erad_hold=info['Erad']
+        Erad_vxB_hold=info['Erad_vxB']
+        Erad_vxvxB_hold=info['Erad_vxvxB']
 
-    em_energy_hold=info['em_energy']
-    other_energy_hold=info['other_energy']
-    total_energy_hold=info['total_energy']
-    zenith_hold=info['zenith']
-    azimuth_hold=info['azimuth']
-    energy_hold=info['energy']
-    xmax_hold=info['xmax']
-    alpha_hold=info['alpha']
-    Erad_hold=info['Erad']
-    clip_hold=info['clip']
-    charge_excess_ratio_hold=info['charge_excess_ratio']
-    S_basic_hold=info['S_basic']
-    Srd_1_hold=info['Srd_1']
-    Srd_2_hold=info['Srd_2']
-    StoEM_hold=info['StoEM']
-    print xmax_hold
+        clip_hold=info['clip']
+        charge_excess_ratio_hold=info['charge_excess_ratio']
+        S_basic_hold=info['S_basic']
+        Srd_1_hold=info['Srd_1']
+        Srd_2_hold=info['Srd_2']
+        StoEM_hold=info['StoEM']
 
     
-    try:    
+    
     	energy=np.concatenate((energy,energy_hold))
         em_energy=np.concatenate((em_energy,em_energy_hold))
         other_energy=np.concatenate((other_energy,other_energy_hold))
@@ -69,6 +73,9 @@ for i in np.arange(len(file_list)):
         xmax=np.concatenate((xmax,xmax_hold))
         alpha=np.concatenate((alpha,alpha_hold))
         Erad=np.concatenate((Erad,Erad_hold))
+        Erad_vxB=np.concatenate((Erad,Erad_vxB_hold))
+        Erad_vxvxB=np.concatenate((Erad,Erad_vxvxB_hold))
+
         clip=np.concatenate((clip,clip_hold))
         charge_excess_ratio=np.concatenate((charge_excess_ratio,charge_excess_ratio_hold))
         S_basic=np.concatenate((S_basic,S_basic_hold))
@@ -78,7 +85,7 @@ for i in np.arange(len(file_list)):
 
    
     except:
-	print 'oops'
+        print 'oops'    
 
 
 
@@ -91,6 +98,8 @@ info={'em_energy':np.asarray(em_energy),
     'xmax':np.asarray(xmax),
     'alpha':np.asarray(alpha),
     'Erad':np.asarray(Erad),
+    'Erad_vxB':np.asarray(Erad_vxB),
+    'Erad_vxvxB':np.asarray(Erad_vxvxB),
     'clip':np.asarray(clip),
     'charge_excess_ratio':np.asarray(charge_excess_ratio),
     'S_basic':np.asarray(S_basic),

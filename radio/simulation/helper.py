@@ -20,11 +20,11 @@ def get_atmosphere(h,atm):
     b=atm[2]
     c=atm[3]
     
-    y = np.where(h < layers[0], a[0] + b[0] * np.exp(-1 * h / c[0]), a[1] + b[1] * np.exp(-1 * h / c[1]))
-    y = np.where(h < layers[1], y, a[2] + b[2] * np.exp(-1 * h / c[2]))
-    y = np.where(h < layers[2], y, a[3] + b[3] * np.exp(-1 * h / c[3]))
-    y = np.where(h < layers[3], y, a[4] - b[4] * h / c[4])
-    y = np.where(h < h_max, y, 0)
+    y = np.where(h > layers[0], a[0] + b[0] * np.exp(-1 * h / c[0]), a[1] + b[1] * np.exp(-1 * h / c[1]))
+    y = np.where(h > layers[1], y, a[2] + b[2] * np.exp(-1 * h / c[2]))
+    y = np.where(h > layers[2], y, a[3] + b[3] * np.exp(-1 * h / c[3]))
+    y = np.where(h > layers[3], y, a[4] - b[4] * h / c[4])
+    y = np.where(h > h_max, y, 0)
     return y
 
 

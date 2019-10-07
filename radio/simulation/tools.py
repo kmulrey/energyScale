@@ -338,6 +338,9 @@ def read_file_plain(filename):
     xmax=info['xmax']
     alpha=info['alpha']
     Erad=info['Erad']
+    Erad_vxB=info['Erad_vxB']
+    Erad_vxvxB=info['Erad_vxvxB']
+
     clip=info['clip']
     charge_excess_ratio=info['charge_excess_ratio']
     S_basic=info['S_basic']
@@ -346,6 +349,9 @@ def read_file_plain(filename):
     density=info['density']
     
     Erad=Erad+Erad*.11-Erad*0.0336
+    Erad_vxB=Erad_vxB+Erad_vxB*.11-Erad_vxB*0.0336
+    Erad_vxvxB=Erad_vxvxB+Erad_vxvxB*.11-Erad_vxvxB*0.0336
+
     S_basic=S_basic+S_basic*.11-S_basic*0.0336
     Srd_1=Srd_1+Srd_1*.11-Srd_1*0.0336
     Srd_2=(Srd_2+Srd_2*.11-Srd_2*0.0336)
@@ -354,4 +360,4 @@ def read_file_plain(filename):
     corr_=((1 - p0_ + p0_ * np.exp(p1_ * (density - average_density)*1e3)) )**2
     
     
-    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio
+    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio,density,Erad_vxB,Erad_vxvxB

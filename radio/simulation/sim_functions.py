@@ -9,9 +9,8 @@ import os
 from scipy import signal
 from scipy.optimize import curve_fit
 
-
-atm_dir='/Users/kmulrey/radio/atmosphere_files/'
-#atm_dir='/vol/astro7/lofar/sim/pipeline/atmosphere_files/'
+#atm_dir='/Users/kmulrey/radio/atmosphere_files/'
+atm_dir='/vol/astro7/lofar/sim/pipeline/atmosphere_files/'
 
 conversion_factor_integrated_signal = 2.65441729e-3 * 6.24150934e18  # to convert V**2/m**2 * s -> J/m**2 -> eV/m**2
 
@@ -344,7 +343,7 @@ def filter(times,traces, fmin, fmax): # 2d-> time,data
     highcut=fmax*1e6
     low = lowcut/nyq
     high = highcut/nyq
-    order=3
+    order=1
     b, a = signal.butter(order, [low, high], btype='band')
 
     for i in np.arange(nTraces):

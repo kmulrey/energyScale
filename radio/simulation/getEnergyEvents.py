@@ -37,7 +37,20 @@ def integrate(r,flu0,flu1):
     
     return 2*np.pi*integral*6.2415e18 # to eV
 
-
+def integrate_one_pol(r,flu):
+    n=len(r)
+    dr=r[1]-r[0]
+    integral=0
+    for i in np.arange(n-1):
+        r0=r[i]
+        r1=r[i+1]
+        val0=r0*(flu[i])
+        val1=r1*(flu[i+1])
+        integral=integral+(val0+val1)*0.5*dr
+    
+    
+    
+    return 2*np.pi*integral*6.2415e18 # to eV
 
 
 parser = OptionParser()
@@ -75,12 +88,13 @@ Srd_2_list=[]
 StoE_list=[]
 rho_list=[]
 a_list=[]
+Erad_vxB_list=[]
+Erad_vxvxB_list=[]
 
 
 
-
-filename='data/'+type+'_test_runs.txt'
-#filename=type+'_runs.txt'
+#filename='data/'+type+'_test_runs.txt'
+filename=type+'_runs.txt'
 
 sim_dir=[]
 runnr=[]
@@ -100,8 +114,8 @@ with open(filename) as f:
 
 
 #for i in np.arange(start_id,stop_id):
-for i in np.arange(2):
-#for i in np.arange(a,a+1):
+#for i in np.arange(2):
+for i in np.arange(a,a+1):
     #try:
     for r in np.arange(1):
         
@@ -151,7 +165,9 @@ for i in np.arange(2):
         xnew = np.linspace(0, 400, num=1000, endpoint=True)
             
         Erad=integrate(xnew,f0(xnew),f1(xnew))
-  
+        Erad_vxB=integrate_one_pol(xnew,f0(xnew))
+        Erad_vxvxB=integrate_one_pol(xnew,f1(xnew))
+
         
         #print 'xmax: {0}'.format(xmax)
         hi=helper.get_vertical_height(xmax,atm)   # height in cm
@@ -193,6 +209,9 @@ for i in np.arange(2):
         xmax_list.append(xmax)
         alpha_list.append(alpha)
         Erad_list.append(Erad)
+        Erad_vxB_list.append(Erad_vxB)
+        Erad_vxvxB_list.append(Erad_vxvxB)
+
         clip_ratio_list.append(clip_ratio)
         charge_excess_ratio_list.append(a)
         S_basic_list.append(S)
@@ -213,6 +232,9 @@ info={'em_energy':np.asarray(em_energy_list),
     'xmax':np.asarray(xmax_list),
     'alpha':np.asarray(alpha_list),
     'Erad':np.asarray(Erad_list),
+    'Erad_vxB':np.asarray(Erad_vxB_list),
+    'Erad_vxvxB':np.asarray(Erad_vxvxB_list),
+
     'clip':np.asarray(clip_ratio_list),
     'charge_excess_ratio':np.asarray(charge_excess_ratio_list),
     'S_basic':np.asarray(S_basic_list),
@@ -224,9 +246,9 @@ info={'em_energy':np.asarray(em_energy_list),
 }
 
 
-'''
+
 outfile=open(outfilename,'w')
 cPickle.dump(info,outfile)
 outfile.close()
-'''
+
 

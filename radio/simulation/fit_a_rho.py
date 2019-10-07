@@ -12,7 +12,10 @@ import helper as helper
 from scipy.optimize import minimize
 import matplotlib.ticker as ticker
 
+plt.ion()
 
+b_scale=2.03
+b=1.8
 mag=2.03
 average_density = 6.5e-4 #in g/cm^3#atmc.get_density(average_zenith, average_xmax) * 1e-3  # in kg/m^3
 p0=0.250524463912
@@ -25,73 +28,73 @@ data_dir='/Users/kmulrey/LOFAR/energy/energyScale/data/radio/sim/'
 
 coreas_file=data_dir+'compiled_sims_proton.dat'
 
-em_energy_P,energy_P,zenith_P,azimuth_P,xmax_P,alpha_P,S_basic_P,Srd_1_P,Srd_2_P,Erad_P,a_P=tools.read_file_plain(data_dir+'compiled_sims_proton.dat')
-em_energy_Fe,energy_Fe,zenith_Fe,azimuth_Fe,xmax_Fe,alpha_Fe,S_basic_Fe,Srd_1_Fe,Srd_2_Fe,Erad_Fe,a_Fe=tools.read_file_plain(data_dir+'compiled_sims_iron.dat')
+em_energy_P,energy_P,zenith_P,azimuth_P,xmax_P,alpha_P,S_basic_P,Srd_1_P,Srd_2_P,Erad_P,a_P,density_P,Erad_vxB_P,Erad_vxvxB_P=tools.read_file_plain(data_dir+'compiled_sims_proton.dat')
+em_energy_Fe,energy_Fe,zenith_Fe,azimuth_Fe,xmax_Fe,alpha_Fe,S_basic_Fe,Srd_1_Fe,Srd_2_Fe,Erad_Fe,a_Fe,density_Fe,Erad_vxB_Fe,Erad_vxvxB_Fe=tools.read_file_plain(data_dir+'compiled_sims_iron.dat')
 
-print len(em_energy_P)
-print len(em_energy_Fe)
+def get_Srd_alpha(Erad,alpha):
+    return Erad/(np.sin(alpha)**2*mag**b)
 
+def get_Srd(Erad,alpha,a):
+    a1=a/(mag**0.9)
+    return Erad/(a1**2+(1-a1**2)*(np.sin(alpha)**2*mag**b))
 
+def get_Srd(Erad,alpha,a,density):
+    p0=0.25
+    p1=-3.08
+    avg_rho=0.65 #km/m3
+    a1=a/(mag**0.9)
 
-
-
-
-#a_em_p,b_em_p,a_sig_em_p,b_sig_em_p=sim.getFit(em_energy_P,Erad_P/(np.sin(alpha_P)**2))
-#a_em_fe,b_em_fe,a_sig_em_fe,b_sig_em_fe=sim.getFit(em_energy_Fe,Erad_Fe/(np.sin(alpha_Fe)**2))
-
-a_P_corr=a_P/(np.power(mag,0.9))
-a_Fe_corr=a_Fe/(np.power(mag,0.9))
-
-#E_use_P=Erad_P/(a_P**2+(1-a_P**2)*(np.sin(alpha_P)**2))
-#E_use_Fe=Erad_Fe/(a_Fe**2+(1-a_Fe**2)*(np.sin(alpha_Fe)**2))
-
-E_use_P=Erad_P/(a_P_corr**2+(1-a_P_corr**2)*(np.sin(alpha_P)**2)*np.power(mag,1.8))
-E_use_Fe=Erad_Fe/(a_Fe_corr**2+(1-a_Fe_corr**2)*(np.sin(alpha_Fe)**2)*np.power(mag,1.8))
-
-
-#a_em_p,b_em_p,a_sig_em_p,b_sig_em_p=sim.getFit(em_energy_P,E_use_P)
-#a_em_fe,b_em_fe,a_sig_em_fe,b_sig_em_fe=sim.getFit(em_energy_Fe,E_use_Fe)
-
-S_P_use=Srd_1_P
-S_Fe_use=Srd_1_Fe
-
-a_em_p,b_em_p,a_sig_em_p,b_sig_em_p=sim.getFit(em_energy_P,S_P_use)
-a_em_fe,b_em_fe,a_sig_em_fe,b_sig_em_fe=sim.getFit(em_energy_Fe,S_Fe_use)
-
-a_tot_p,b_tot_p,a_sig_tot_p,b_sig_tot_p=sim.getFit(energy_P,S_P_use)
-a_tot_fe,b_tot_fe,a_sig_tot_fe,b_sig_tot_fe=sim.getFit(energy_Fe,S_Fe_use)
-
-
-print '\n\nEM energy fit'
-print '___________________'
-print '{0:.3f} +/- {1:.3f}       {2:.3f} +/- {3:.3f}'.format(a_em_p,a_sig_em_p,b_em_p,b_sig_em_p)
-print '{0:.3f} +/- {1:.3f}       {2:.3f} +/- {3:.3f}'.format(a_em_fe,a_sig_em_fe,b_em_fe,b_sig_em_fe)
-
-
-print '\n\nTotal energy fit'
-print '___________________'
-print '{0:.3f} +/- {1:.3f}       {2:.3f} +/- {3:.3f}'.format(a_tot_p,a_sig_tot_p,b_tot_p,b_sig_tot_p)
-print '{0:.3f} +/- {1:.3f}       {2:.3f} +/- {3:.3f}'.format(a_tot_fe,a_sig_tot_fe,b_tot_fe,b_sig_tot_fe)
-
-
-x = np.linspace(10**16,10**18.5,100)
-x_data = np.linspace(10**17,10**18,100)
-
-rad_em_fit_p=sim.energy_to_rad(x,a_em_p,b_em_p)
-rad_em_fit_fe=sim.energy_to_rad(x,a_em_fe,b_em_fe)
-
-rad_tot_fit_p=sim.energy_to_rad(x,a_tot_p,b_tot_p)
-rad_tot_fit_fe=sim.energy_to_rad(x,a_tot_fe,b_tot_fe)
-#rad_em_fit_p=sim.energy_to_rad(x,1.64,2)
-#rad_em_fit_fe=sim.energy_to_rad(x,1.64,2)
+    return Erad/((a1**2+(1-a1**2)*(np.sin(alpha)**2*mag**b))*(a-p0+p0*np.exp(p1*(density*1e3-avg_rho))**2))
 
 
 #x = np.linspace(10**4,10**8,100)
 
-fig = plt.figure()
-ax1 = fig.add_subplot(1,2,1,aspect=1)
-ax2 = fig.add_subplot(1,2,2,aspect=1)
+y_plt=np.sin(alpha_P)*np.sqrt(Erad_vxvxB_P/Erad_vxB_P)*mag**0.9
+x_plt=density_P*1e3
 
+fig = plt.figure()
+ax1 = fig.add_subplot(1,1,1)
+
+
+ax1.plot(x_plt,y_plt,'.')
+
+
+
+ax1.grid()
+plt.show()
+raw_input()
+plt.close()
+
+
+'''
+fig = plt.figure()
+ax1 = fig.add_subplot(1,1,1,aspect=1)
+
+
+ax1.plot(em_energy_P,Erad_P,'.',color='blue',alpha=0.2,label='proton')
+#ax1.plot(em_energy_P,get_Srd_alpha(Erad_P,alpha_P),'.',color='red',alpha=0.2,label='proton')
+ax1.plot(em_energy_P,Erad_P/(a_P**2+(1-a_P**2)*(np.sin(alpha_P)**2*mag**b)),'.',color='green',alpha=0.2,label='proton')
+
+ax1.plot(em_energy_P,get_Srd(Erad_P,alpha_P,a_P,density_P),'.',color='red',alpha=0.2,label='proton')
+
+#ax1.plot(em_energy_P,Srd_1_P,'.',color='red',alpha=0.2,label='proton')
+
+#ax1.plot(em_energy_P,Srd_2_P,'.',color='purple',alpha=0.2,label='proton')
+
+
+
+ax1.set_yscale('log')
+ax1.set_xscale('log')
+
+
+
+ax1.grid()
+plt.show()
+raw_input()
+plt.close()
+'''
+
+'''
 
 #ax1.plot(x,x,color='black')
 
@@ -134,3 +137,4 @@ ax2.grid()
 plt.show()
 raw_input()
 plt.close()
+'''

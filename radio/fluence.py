@@ -99,5 +99,5 @@ def calculate_energy_fluence(traces,times, signal_window=100., remove_noise=True
         """
     
     energy_fluence_vector = calculate_energy_fluence_vector(traces, times, signal_window, remove_noise)
-    return np.sum(energy_fluence_vector, axis=-1)
+    return energy_fluence_vector#np.sum(energy_fluence_vector, axis=-1)
 
