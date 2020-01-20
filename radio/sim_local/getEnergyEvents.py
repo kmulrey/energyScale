@@ -18,7 +18,6 @@ import fluence as flu
 import radiation_energy as rad
 import sim_functions as sim
 import helper as helper
-import sim_functions as sim
 import debug_sim as debug_sim
 
 
@@ -26,7 +25,8 @@ plt.ion()
 
 
 #event_path='/Users/kmulrey/radio/events/'
-event_path='/vol/astro7/lofar/sim/pipeline/events/'
+#event_path='/vol/astro7/lofar/sim/pipeline/events/'
+event_path='/vol/astro3/lofar/sim/pipeline/events/'
 
 def integrate(r,flu0,flu1):
     n=len(r)
@@ -73,7 +73,7 @@ type=options.type
 
 
 #outfilename='/Users/kmulrey/LOFAR/energy/energyScale/data/radio/sim_local/output/'+type+'_'+str(a)+'_debug2.dat'
-outfilename='output/'+type+'_'+str(a)+'_debug2.dat'
+outfilename='output_US_standard/'+type+'_'+str(a)+'.dat'
 # info to record
 
 em_energy_list=[]
@@ -116,12 +116,8 @@ for i in np.arange(a,a+1):
         ant_pos,times,efield,zenith,az,energy,xmax=debug_sim.get_efield(sim_dir[i], runnr[i])
         em_energy,other_energy_hold,total_energy_hold=sim.getEM(sim_dir[i], runnr[i])
         alpha=sim.GetAlpha(zenith,az,1.1837)
-        atm=sim.get_atm(event)
-        #hi=helper.get_vertical_height(xmax,atm)   # height in cm
-        #at=helper.get_atmosphere(hi,atm)
-        #rho=debug_sim.return_density_array(hi, atm)
-        #rho=debug_sim.return_density(hi, atm)
-        
+        atm=sim.get_US_atm(event)
+  
         hi=debug_sim.get_vertical_height(xmax,atm)   # height in cm
         at=debug_sim.get_atmosphere(hi,atm)
         rho=debug_sim.return_density(hi, atm)

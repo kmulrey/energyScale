@@ -366,7 +366,14 @@ def get_atm(event):
 
     return atm
 
-
+def get_US_atm(event):
+    
+    # read atmospheric parameters ATMLAY, A, B, C respectively for event
+    
+    atm=np.asarray([[0.0,4.0e5,10.0e5,40.0e5,100.0e5],[-186.555305,-94.919,0.61289,0.0,0.01128292],[1222.6562,1144.9069,1305.5948,540.1778,1.0],[994186.38,878153.55,636143.04,772170.16,1.0e9]])
+    
+    
+    return atm
 
 
 def getEM(datadir,fileno):

@@ -32,23 +32,23 @@ def read_file(filename):
     infile.close()
     
     em_energy=info['em_energy']
-    other_energy=info['other_energy']
-    total_energy=info['total_energy']
     zenith=info['zenith']
     azimuth=info['azimuth']
     energy=info['energy']
     xmax=info['xmax']
     alpha=info['alpha']
     Erad=info['Erad']
+    Erad_gm=info['Erad_gm']
+    Erad_ce=info['Erad_ce']
+
     clip=info['clip']
-    charge_excess_ratio=info['charge_excess_ratio']
-    S_basic=info['S_basic']
-    Srd_1=info['Srd_1']
-    Srd_2=info['Srd_2']
+
     density=info['density']
     xmax_fit=info['xmax_fit']
     core_x=info['core_x']
     core_y=info['core_y']
+    x_off=info['x_off']
+    y_off=info['y_off']
     p_ratio=info['p_ratio']
     d_ratio=info['d_ratio']
     combchi2=info['combchi2']
@@ -58,40 +58,15 @@ def read_file(filename):
     dmax=info['dmax']
     type=info['type']
     
-    p_ratio=p_ratio
     
-    Erad=Erad+Erad*.11-Erad*0.0336
-    S_basic=S_basic+S_basic*.11-S_basic*0.0336
-    Srd_1=Srd_1+Srd_1*.11-Srd_1*0.0336
-    Srd_2=(Srd_2+Srd_2*.11-Srd_2*0.0336)
-    
-    corr=((1 - p0 + p0 * np.exp(p1 * (density - average_density)*1e3)) )**2
-    corr_=((1 - p0_ + p0_ * np.exp(p1_ * (density - average_density)*1e3)) )**2
-    
-    
-    return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2,Erad,charge_excess_ratio,event,p_ratio,d_ratio,type
+    return em_energy,energy,zenith,azimuth,xmax,alpha,Erad,Erad_ce,Erad_gm,event,p_ratio,d_ratio,type,clip,core_x,core_y,x_off,y_off,density
 
 
 
 def combine_files(coreas_file,ldf_file,uncertainty_file):
 
-    em_energy_int,energy_int,zenith_int,azimuth_int,xmax_int,alpha_int,S_basic_int,Srd_1_int,Srd_2_int,Erad_int,a_int,event_int,p_ratio_i,d_ratio_i,type_int=read_file(coreas_file)
+    em_energy_int,energy_int,zenith_int,azimuth_int,xmax_int,alpha_int,Erad_int,Erad_ce_int,Erad_gm_int,event_int,p_ratio_i,d_ratio_i,type_int,clip_int,core_x_int,core_y_int,x_off_int,y_off_int,density_int=read_file(coreas_file)
     
-    
-
-    parameter_file=open(ldf_file,'r')
-    info=cPickle.load(parameter_file)
-    parameter_file.close
-    event_number=info['event_number']
-    lora_energy_p=info['lora_energy']
-    radiation_energy_p=np.asarray(info['radiation_energy'])
-    alpha_param=np.asarray(info['alpha'])
-    lofar_e_err=np.asarray(info['lofar_e_err'])
-    lora_e_err=np.asarray(info['lora_e_err'])
-    
-    
-    
-
     uncertainty_file=open(uncertainty_file,'r')
     info=cPickle.load(uncertainty_file)
 
@@ -107,30 +82,30 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
     
     lora_energy=np.empty([0])
     radiation_i=np.empty([0])
-    radiation_p=np.empty([0])
     alpha_i=np.empty([0])
-    alpha_p=np.empty([0])
 
     azimuth=np.empty([0])
     zenith=np.empty([0])
     event=np.empty([0])
     em_energy=np.empty([0])
+    
+    Erad=np.empty([0])
+    Erad_gm=np.empty([0])
+    Erad_ce=np.empty([0])
 
-    sim_energy=np.empty([0])
+    energy=np.empty([0])
     xmax=np.empty([0])
+    core_x=np.empty([0])
+    core_y=np.empty([0])
+    x_off=np.empty([0])
+    y_off=np.empty([0])
+    density=np.empty([0])
+
     p_ratio=np.empty([0])
     d_ratio=np.empty([0])
     type=np.empty([0])
     lora_err=np.empty([0])
     lofar_err=np.empty([0])
-    combchi2=np.empty([0])
-    chi2=np.empty([0])
-    S_basic=np.empty([0])
-    Srd_1=np.empty([0])
-    Srd_2=np.empty([0])
-    
-    ldf_radio_err=np.empty([0])
-    ldf_particle_err=np.empty([0])
 
     sigma_e=np.empty([0])
     sigma_e_radio=np.empty([0])
@@ -145,46 +120,32 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
     for e in np.arange(nEvents):
         n=event_int[e]
         index_i=np.where(event_int == n)[0]
-        index_p=np.where(event_number == n)[0]
         index_u=np.where(event_u == n)[0]
     
     
-    
-        if len(index_p)>0 and len(index_i>0) and len(index_u>0) and sigma_e_radio_u[index_u]<1.0 and p_ratio_i[index_i]<5 and p_ratio_i[index_i]>0.1 and sigma_e_u[index_u]<1.3:
+        if len(index_i>0) and len(index_u>0) and sigma_e_radio_u[index_u]<1.0 and p_ratio_i[index_i]<5 and p_ratio_i[index_i]>0.1 and sigma_e_u[index_u]<1.3:
         
-            lora_energy=np.concatenate((lora_energy,np.asarray(lora_energy_p[index_p])),axis=0)
-            ldf_particle_err=np.concatenate((ldf_particle_err,np.asarray(lora_e_err[index_p])),axis=0)
-            ldf_radio_err=np.concatenate((ldf_radio_err,np.asarray(lofar_e_err[index_p])),axis=0)
-        
-            scale=np.sin(alpha_param[index_p])**2/np.sin(alpha_int[index_i])**2
-        
-            radiation_i=np.concatenate((radiation_i,(1/(np.sin(alpha_int[index_i])**2))*np.asarray(Erad_int[index_i])),axis=0)
-            radiation_p=np.concatenate((radiation_p,scale*np.asarray(radiation_energy_p[index_p])),axis=0)
-        
+
+            Erad=np.concatenate((Erad,np.asarray(Erad_int[index_i])),axis=0)
+            Erad_ce=np.concatenate((Erad_ce,np.asarray(Erad_ce_int[index_i])),axis=0)
+            Erad_gm=np.concatenate((Erad_gm,np.asarray(Erad_gm_int[index_i])),axis=0)
+
             azimuth=np.concatenate((azimuth,np.asarray(azimuth_int[index_i])),axis=0)
             zenith=np.concatenate((zenith,np.asarray(zenith_int[index_i])),axis=0)
         
             event=np.concatenate((event,np.asarray(event_int[index_i])),axis=0)
         
             em_energy=np.concatenate((em_energy,np.asarray(em_energy_int[index_i])),axis=0)
-        
+            energy=np.concatenate((energy,np.asarray(energy_int[index_i])),axis=0)
+            density=np.concatenate((density,np.asarray(density_int[index_i])),axis=0)
+
             xmax=np.concatenate((xmax,np.asarray(xmax_int[index_i])),axis=0)
         
             p_ratio=np.concatenate((p_ratio,np.asarray(p_ratio_i[index_i])),axis=0)
             d_ratio=np.concatenate((d_ratio,np.asarray(d_ratio_i[index_i])),axis=0)
         
             type=np.concatenate((type,np.asarray(type_int[index_i])),axis=0)
-            #combchi2=np.concatenate((combchi2,np.asarray(combchi2_i[index_i])),axis=0)
-            #chi2=np.concatenate((chi2,np.asarray(radiochi2_i[index_i])),axis=0)
-
-            S_basic=np.concatenate((S_basic,np.asarray(S_basic_int[index_i])),axis=0)
-            Srd_1=np.concatenate((Srd_1,np.asarray(Srd_1_int[index_i])),axis=0)
-            Srd_2=np.concatenate((Srd_2,np.asarray(Srd_2_int[index_i])),axis=0)
-
-        
             alpha_i=np.concatenate((alpha_i,np.asarray(alpha_int[index_i])),axis=0)
-            alpha_p=np.concatenate((alpha_p,np.asarray(alpha_param[index_p])),axis=0)
-            sim_energy=np.concatenate((sim_energy,np.asarray(energy_int[index_i])),axis=0)
 
         
             sigma_e=np.concatenate((sigma_e,np.asarray(sigma_e_u[index_u])),axis=0)
@@ -194,7 +155,7 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
             sigma_r=np.concatenate((sigma_r ,np.asarray(sigma_r_u[index_u])),axis=0)
 
 
-    return event,radiation_i,radiation_p,azimuth,zenith,xmax,em_energy,sim_energy,p_ratio,d_ratio,type,alpha_i,alpha_p,sigma_e,sigma_e_radio,lora_energy,ldf_particle_err,ldf_radio_err,S_basic,Srd_1,Srd_2
+    return event,Erad,Erad_ce,Erad_gm,azimuth,zenith,xmax,em_energy,energy,density,p_ratio,d_ratio,type,alpha_i,sigma_e,sigma_e_radio,sigma_r
 
 def rad_to_energy(x,a,b):
     return np.power((x/(a*1e7)),1/b)*1e18
@@ -276,6 +237,12 @@ def prediction(E,index=1.8):
     # PRL prediction from AERA
     E_rad = 15.8e6*(E*1e-18)**2#*2.04**index
     return E_rad
+def lofar_prediction(E,a,b,index=1.8):
+    # PRL prediction from AERA
+    #E_rad = 10.7e6*(E*1e-18)**1.99#/2.04**index
+    E_rad = a*1e7*(E*1e-18)**b#/2.04**index
+
+    return E_rad
 def pred_sys_up(E,index=1.8):
     # Plus uncertainties
     E_rad = (15.8+6.8)*10**6*(E*1e-18)**2#*(2.04**index)
@@ -322,6 +289,18 @@ def e(pars,energy,rad,std):
     return X2
 
 
+def e_one(pars,energy,rad,std):
+    a=pars[0]
+    y=a*1e7*np.power((energy*1e-18),2.00)
+    X2=np.sum(((np.log10(rad)-np.log10(y))**2)/(np.log10(std))**2)
+    return X2
+
+def e_one_inverse(pars,energy,rad,std):
+    a=pars[0]
+    y=a*1e7*np.power((energy*1e-18),2.00)
+    X2=np.sum(((np.log10(rad)-np.log10(y))**2)/(np.log10(std))**2)
+    return X2
+
 def read_file_plain(filename):
     
     infile=open(filename,'r')
@@ -361,3 +340,13 @@ def read_file_plain(filename):
     
     
     return em_energy,energy,zenith,azimuth,xmax,alpha,S_basic,Srd_1,Srd_2*corr/corr_,Erad,charge_excess_ratio,density,Erad_vxB,Erad_vxvxB
+
+
+
+
+
+
+
+
+
+

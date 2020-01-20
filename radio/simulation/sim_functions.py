@@ -422,6 +422,8 @@ def energy_to_rad(x,a,b):
     return a*1e7*(x/1e18)**b#*(mag)**b
 
 
+def rad_to_energy(x,a,b):
+    return np.power((x/(a*1e7)),1./b)*1e18
 
 
 
