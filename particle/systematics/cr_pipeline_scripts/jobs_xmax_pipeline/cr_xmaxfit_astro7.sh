@@ -16,23 +16,24 @@ export LD_LIBRARY_PATH=$LOFARSOFT/release/lib:$LD_LIBRARY_PATH
 PYCRTOOLS=$LOFARSOFT/src/PyCRTools
 
 BASE_PATH=/vol/astro7/lofar/sim/pipeline
+
 # BASE_PATH=/vol/astro3/lofar/sim/pipeline
 # DB_PATH=$BASE_PATH
 # DB_FILE=$DB_PATH/bogus
 # DATA_PATH=$BASE_PATH/data
-# RESULTS_PATH=$BASE_PATH/results
+RESULTS_PATH=/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/sim_tests/results
 # LORA_PATH=$BASE_PATH/LORA
 DATA_DIR=$BASE_PATH/events
 SIMULATION_DIR=$BASE_PATH/run
-OUTPUT_DIR=$BASE_PATH/production_analysis_Oct2019
-OUTPUT_DIR_RADIO_ONLY=$BASE_PATH/production_analysis_radio_only_Oct2019
-MCVSMC_DIR=$BASE_PATH/production_mcvsmc_radio_only_Oct2019 # or _radio_only
-LOG_DIR=$BASE_PATH/log
+OUTPUT_DIR=$RESULTS_PATH/production_analysis_Feb2020
+OUTPUT_DIR_RADIO_ONLY=$RESULTS_PATH/production_analysis_radio_only_Feb2020
+MCVSMC_DIR=$RESULTS_PATH/production_mcvsmc_radio_only_Oct2019 # or _radio_only
+LOG_DIR=$RESULTS_PATH/log
 
 #LOG_PATH=$BASE_PATH/log
 
 # Get event id for current task and mark it as NEXT
-EVENT_ID=$(awk "NR==$SLURM_ARRAY_TASK_ID" $HOME/cr_xmaxfit_lorasim_done_astro7.txt)
+EVENT_ID=$(awk "NR==$SLURM_ARRAY_TASK_ID" $HOME/cr_physics_new)
 #EVENT_ID=$(awk "NR==$SLURM_ARRAY_TASK_ID" $HOME/eventlist_meth_todo.txt)
 LOGFILE=$LOG_DIR/cr_xmaxfit-$EVENT_ID.txt
 

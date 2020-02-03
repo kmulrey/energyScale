@@ -139,7 +139,7 @@ else:
         print 'Error running fit_analysis_updated.py (radio-only)!'
         sys.exit()
     #waitAndHandleErrors(process, 'fit_analysis_updated.py')
-
+'''
 # Run the Xmax fit analysis with COMBINED radio & particles fit procedure
 if os.path.exists(os.path.join(outputdir, 'reco{0}{1}.dat'.format(eventid, iterationSuffix))):
     print 'Fit analysis (combined fit) already done for event %d iteration %d, skipping...' % (eventid, iteration)
@@ -170,10 +170,10 @@ if doMCvsMC:
 elif not options.set_status_done:
     sys.exit()
 # Only set status to XMAXFIT_DONE if mc-vs-mc has been done (unless overridden by option)
-
+'''
 
 #waitAndHandleErrors(process, 'mcvsmc_updated.py')
-
+'''
 dbManager = crdb.CRDatabase("crdb", host="coma00.science.ru.nl", user="crdb", password="crdb", dbname="crdb")
 db = dbManager.db
 
@@ -183,7 +183,7 @@ print 'done'
 
 event.simulation_status = "XMAXFIT_DONE"
 event.write()
-
+'''
 #eventid = 212496991
 """
 print 'Reading database event data for eventid %d ...' % eventid
