@@ -94,38 +94,6 @@ def find_SIM_dir(event_no,xmax):
 
 
 
-i=10
-
-event_list=[]
-file_list=[]
-
-for i in np.arange(len(CR_events)):
-    #for i in np.arange(3):
-
-    #print '............{0}......{1}.............'.format(CR_events[i][0],CR_events[i][8])
-    file,closest_xmax=find_SIM_dir(CR_events[i][0],CR_events[i][1])
-    print '{0}  {1}'.format(file,closest_xmax)
-    if closest_xmax!=0 and file!='null':
-        file_list.append(file)
-        event_list.append(int(CR_events[i][0]))
-    #print '{0}  {1}'.format(file,closest_xmax)
-
-
-outputfile=open('best_sim_files.txt','w')
-
-for i in np.arange(len(event_list)):
-    print '{0}  {1}'.format(event_list[i],file_list[i])
-    directory=file_list[i].split('SIM')[0]
-    sim_n=file_list[i].split('SIM')[1].split('_')[0]
-
-    #print directory
-    #print sim_n
-    outputfile.write('{0}  {1}  {2}\n'.format(event_list[i],directory, sim_n))
-
-outputfile.close()
-
-
-
 
 
 
