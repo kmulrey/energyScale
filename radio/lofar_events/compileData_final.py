@@ -4,7 +4,7 @@ import cPickle
 
 
 #data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/radio/lofar_events/output/'
-data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/energyScale/radio/lofar_events/'
+data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/energyScale/radio/lofar_events/output/'
 #data_dir='output/'
 
 file_list=[]
