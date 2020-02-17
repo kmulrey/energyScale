@@ -263,7 +263,7 @@ for i in np.arange(e,e+1):
         if converge_temp1==True:
             converge_temp=1
 
-
+        print 'converged: {0}'.format(converge_temp)
 
         
         sim_dir,runnr,closest_xmax=find_SIM_dir(int(event_list[i]),xmaxreco_temp)
