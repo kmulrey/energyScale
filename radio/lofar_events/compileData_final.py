@@ -3,7 +3,7 @@ import os
 import cPickle
 
 
-3data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/radio/lofar_events/output/'
+#data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/radio/lofar_events/output/'
 data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/energyScale/radio/lofar_events/'
 #data_dir='output/'
 
