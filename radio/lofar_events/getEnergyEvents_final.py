@@ -17,6 +17,8 @@ import radiation_energy as rad
 import sim_functions as sim
 import helper as helper
 import sim_functions as sim
+sys.path.insert(0, '../sim_local')
+
 import debug_sim as debug_sim
 
 
