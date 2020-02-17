@@ -57,16 +57,18 @@ def read_file(filename):
     density=info['density']
     dmax=info['dmax']
     type=info['type']
+    converged=info['converged']
+    lora_count=info['lora_count']
     
     
-    return em_energy,energy,zenith,azimuth,xmax,alpha,Erad,Erad_ce,Erad_gm,event,p_ratio,d_ratio,type,clip,core_x,core_y,x_off,y_off,density
+    return em_energy,energy,zenith,azimuth,xmax,alpha,Erad,Erad_ce,Erad_gm,event,p_ratio,d_ratio,type,clip,core_x,core_y,x_off,y_off,density,converged,lora_count
 
 
 
 def combine_files(coreas_file,ldf_file,uncertainty_file):
 
-    em_energy_int,energy_int,zenith_int,azimuth_int,xmax_int,alpha_int,Erad_int,Erad_ce_int,Erad_gm_int,event_int,p_ratio_i,d_ratio_i,type_int,clip_int,core_x_int,core_y_int,x_off_int,y_off_int,density_int=read_file(coreas_file)
-    
+    em_energy_int,energy_int,zenith_int,azimuth_int,xmax_int,alpha_int,Erad_int,Erad_ce_int,Erad_gm_int,event_int,p_ratio_i,d_ratio_i,type_int,clip_int,core_x_int,core_y_int,x_off_int,y_off_int,density_int,converged_int,lora_count_int=read_file(coreas_file)
+
     uncertainty_file=open(uncertainty_file,'r')
     info=cPickle.load(uncertainty_file)
 
@@ -106,6 +108,8 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
     type=np.empty([0])
     lora_err=np.empty([0])
     lofar_err=np.empty([0])
+    converged=np.empty([0])
+    lora_count=np.empty([0])
 
     sigma_e=np.empty([0])
     sigma_e_radio=np.empty([0])
@@ -144,6 +148,10 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
             p_ratio=np.concatenate((p_ratio,np.asarray(p_ratio_i[index_i])),axis=0)
             d_ratio=np.concatenate((d_ratio,np.asarray(d_ratio_i[index_i])),axis=0)
         
+            converged=np.concatenate((converged,np.asarray(converged_int[index_i])),axis=0)
+            lora_count=np.concatenate((lora_count,np.asarray(lora_count_int[index_i])),axis=0)
+
+        
             type=np.concatenate((type,np.asarray(type_int[index_i])),axis=0)
             alpha_i=np.concatenate((alpha_i,np.asarray(alpha_int[index_i])),axis=0)
 
@@ -155,7 +163,7 @@ def combine_files(coreas_file,ldf_file,uncertainty_file):
             sigma_r=np.concatenate((sigma_r ,np.asarray(sigma_r_u[index_u])),axis=0)
 
 
-    return event,Erad,Erad_ce,Erad_gm,azimuth,zenith,xmax,em_energy,energy,density,p_ratio,d_ratio,type,alpha_i,sigma_e,sigma_e_radio,sigma_r
+    return event,Erad,Erad_ce,Erad_gm,azimuth,zenith,xmax,em_energy,energy,density,p_ratio,d_ratio,type,alpha_i,sigma_e,sigma_e_radio,sigma_r,converged,lora_count
 
 def rad_to_energy(x,a,b):
     return np.power((x/(a*1e7)),1/b)*1e18

@@ -48,9 +48,11 @@ converged=np.empty([0])
 lora_count=np.empty([0])
 
 
+print 'processing {0} files'.format(len(file_list))
+
 for i in np.arange(len(file_list)):
     if '2020' in file_list[i]:
-        print file_list[i]
+        p#rint file_list[i]
         infile=open(file_list[i],'r')
         info=cPickle.load(infile)
         infile.close()
@@ -118,7 +120,7 @@ for i in np.arange(len(file_list)):
         # except:
         #print 'oops'
 
-
+print len(em_energy)
 
 info={'em_energy':np.asarray(em_energy),
     'energy':np.asarray(energy),
