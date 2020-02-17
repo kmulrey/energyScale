@@ -78,7 +78,7 @@ for i in np.arange(len(file_list)):
         density_hold=info['density']
         dmax_hold=info['dmax']
         type_hold=info['type']
-        converged_hold1=info['converged']
+        converged_hold=info['converged']
         lora_count_hold=info['lora_density']
         
         
