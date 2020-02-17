@@ -111,7 +111,7 @@ for i in np.arange(len(file_list)):
             density=np.concatenate((density,density_hold))
             dmax=np.concatenate((dmax,dmax_hold))
             type=np.concatenate((type,type_hold))
-            converged=np.concatenate((converged,[converged_hold]))
+            converged=np.concatenate((converged,converged_hold))
             lora_count=np.concatenate((lora_count,lora_count_hold))
 
 
