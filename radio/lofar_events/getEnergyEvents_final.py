@@ -43,8 +43,12 @@ parser.add_option('-e', '--event',type='int',help='line number of event',default
 e=int(options.event)
 
 
-reco_dir='/vol/astro7/lofar/sim/pipeline/production_analysis_oct2018/'
+#reco_dir='/vol/astro7/lofar/sim/pipeline/production_analysis_oct2018/'
+reco_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/sim_tests/results/production_analysis_radio_only_FINAL/'
 event_path='/vol/astro7/lofar/sim/pipeline/events/'
+
+output_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/energyScale/radio/lofar_events/output/'
+
 
 def integrate(r,flu0,flu1):
     n=len(r)
@@ -198,6 +202,9 @@ Erad_gm_list=[]
 Erad_ce_list=[]
 type_list=[]
 
+converge_list=[]
+lora_dens_list=[]
+
 
 
 
@@ -227,7 +234,7 @@ for i in np.arange(e,e+1):
         continue
 
 
-#try:
+    
     for g in np.arange(1):
         analysisinfo = cPickle.load(open(use_file,'r'))
         #print analysisinfo.keys()
@@ -248,6 +255,9 @@ for i in np.arange(e,e+1):
         energy_temp=analysisinfo['energy']
         zenith_temp=analysisinfo['zenith']
         azimuth_temp=analysisinfo['azimuth']
+        converge_temp=analysisinfo['fitconverged']
+        lora_dens_temp=analysisinfo['lora_dens']
+
 
 
 
@@ -336,9 +346,13 @@ for i in np.arange(e,e+1):
         d_ratio_list.append(d_ratio_temp)
         combchi2_list.append(combchi2_temp)
         radiochi2_list.append(radiochi2_temp)
+        
+        converge_list.append(converge_temp)
+        lora_dens_list.append(lora_dens_temp)
 
 
 
+    
 
 #   except:
 #       print'can\'t open file'
@@ -368,17 +382,20 @@ info={'em_energy':np.asarray(em_energy_list),
     'density':np.asarray(rho_list),
     'dmax':np.asarray(dmax_list),
     'type':np.asarray(type_list),
+    'converged':np.asarray(converge_list),
+    'lora_density':lora_dens_list
 
 }
 
 print 'event okay'
 
-outfile=open('output/event_'+str(int(event_list[e]))+'_information_oct8_2019.dat','w')
+#outfile=open('output/event_'+str(int(event_list[e]))+'_information_oct8_2019.dat','w')
+outfile=open(output_dir+'/event_'+str(int(event_list[e]))+'_information_feb17_2020.dat','w')
+
 cPickle.dump(info,outfile)
 outfile.close()
 
 
 print 'file written'
-
 
 
