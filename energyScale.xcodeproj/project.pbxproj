@@ -9,12 +9,14 @@
 /* Begin PBXFileReference section */
 		41ACAD502343449700B8AA3B /* particle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = particle; sourceTree = "<group>"; };
 		41ACAD512343449700B8AA3B /* radio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = radio; sourceTree = "<group>"; };
+		41F742B823FAFDA5004CE5D7 /* energy_events.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = energy_events.txt; path = radio/energy_events.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		41ACAD492343445500B8AA3B = {
 			isa = PBXGroup;
 			children = (
+				41F742B823FAFDA5004CE5D7 /* energy_events.txt */,
 				41ACAD502343449700B8AA3B /* particle */,
 				41ACAD512343449700B8AA3B /* radio */,
 			);

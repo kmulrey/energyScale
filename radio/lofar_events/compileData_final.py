@@ -3,7 +3,8 @@ import os
 import cPickle
 
 
-data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/radio/lofar_events/output/'
+3data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/radio/lofar_events/output/'
+data_dir='/vol/astro3/lofar/sim/kmulrey/energy/LOFARenergy/energyScale/radio/lofar_events/'
 #data_dir='output/'
 
 file_list=[]
@@ -11,7 +12,7 @@ file_list=[]
 for file in os.listdir(data_dir):
     file_list.append(data_dir+file)
 
-outfilename='compiled_sims_all_final.dat'
+outfilename='compiled_sims_all_final_feb17.dat'
 
 
 
@@ -43,6 +44,8 @@ clip=np.empty([0])
 density=np.empty([0])
 dmax=np.empty([0])
 type=np.empty([0])
+converged=np.empty([0])
+lora_count=np.empty([0])
 
 
 for i in np.arange(len(file_list)):

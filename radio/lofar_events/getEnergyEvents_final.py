@@ -350,7 +350,7 @@ for i in np.arange(e,e+1):
         radiochi2_list.append(radiochi2_temp)
         
         converge_list.append(converge_temp)
-        lora_dens_list.append(lora_dens_temp)
+        lora_dens_list.append(len(lora_dens_temp))
 
 
 
@@ -385,7 +385,7 @@ info={'em_energy':np.asarray(em_energy_list),
     'dmax':np.asarray(dmax_list),
     'type':np.asarray(type_list),
     'converged':np.asarray(converge_list),
-    'lora_density':lora_dens_list
+    'lora_density':np.asarray(lora_dens_list)
 
 }
 
