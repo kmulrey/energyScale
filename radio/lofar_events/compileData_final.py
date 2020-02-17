@@ -49,7 +49,7 @@ lora_count=np.empty([0])
 
 
 for i in np.arange(len(file_list)):
-    if '2019' in file_list[i]:
+    if '2020' in file_list[i]:
         print file_list[i]
         infile=open(file_list[i],'r')
         info=cPickle.load(infile)
