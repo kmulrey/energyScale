@@ -78,6 +78,8 @@ for i in np.arange(len(file_list)):
         density_hold=info['density']
         dmax_hold=info['dmax']
         type_hold=info['type']
+        converged_hold=info['converged']
+        lora_count_hold=info['lora_density']
         
 
     
@@ -108,6 +110,8 @@ for i in np.arange(len(file_list)):
             density=np.concatenate((density,density_hold))
             dmax=np.concatenate((dmax,dmax_hold))
             type=np.concatenate((type,type_hold))
+            converged=np.concatenate((converged,converged_hold))
+            lora_count=np.concatenate((lora_count,lora_count_hold))
 
 
         # except:
@@ -139,6 +143,8 @@ info={'em_energy':np.asarray(em_energy),
     'density':np.asarray(density),
     'dmax':np.asarray(dmax),
     'type':np.asarray(type),
+    'converged':np.asarray(converged),
+    'lora_count':np.asarray(lora_count)
 
 }
 
