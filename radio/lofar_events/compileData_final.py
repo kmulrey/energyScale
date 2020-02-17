@@ -82,7 +82,7 @@ for i in np.arange(len(file_list)):
         lora_count_hold=info['lora_density']
         
         
-        print converged_hold1
+        print converged_hold1[0]
 
         if converged_hold1=='True':
             converged_hold=1
@@ -116,7 +116,7 @@ for i in np.arange(len(file_list)):
             density=np.concatenate((density,density_hold))
             dmax=np.concatenate((dmax,dmax_hold))
             type=np.concatenate((type,type_hold))
-            converged=np.concatenate((converged,[converged_hold]))
+            converged=np.concatenate((converged,converged_hold[0]))
             lora_count=np.concatenate((lora_count,lora_count_hold))
 
 
