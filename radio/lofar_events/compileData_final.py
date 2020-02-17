@@ -82,13 +82,8 @@ for i in np.arange(len(file_list)):
         lora_count_hold=info['lora_density']
         
         
-        print converged_hold1[0][0]
-
-        if converged_hold1=='True':
-            converged_hold=1
-        else:
-            converged_hold=0
-    
+        
+        
         #try:
         for i in np.arange(1):
             energy=np.concatenate((energy,energy_hold))

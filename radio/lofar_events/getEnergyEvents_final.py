@@ -257,9 +257,11 @@ for i in np.arange(e,e+1):
         energy_temp=analysisinfo['energy']
         zenith_temp=analysisinfo['zenith']
         azimuth_temp=analysisinfo['azimuth']
-        converge_temp=analysisinfo['fitconverged']
+        converge_temp1=analysisinfo['fitconverged']
         lora_dens_temp=analysisinfo['lora_dens']
-
+        converge_temp=0
+        if converge_temp1==True:
+            converge_temp=1
 
 
 
